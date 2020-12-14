@@ -8,6 +8,7 @@ const user = require("./User");
 const User = require("./User");
 const NodeCache = require('node-cache');
 const bcrypt = require('bcryptjs')
+const cookieParser = require('cookie-parser');
 
 const MongoClient = mongo.MongoClient;
 const uri = "mongodb+srv://monesatj:personal_budget@cluster0.34ym9.mongodb.net/personal_budget?retryWrites=true&w=majority";
@@ -41,9 +42,11 @@ var closeConnection = function () {
     client.close();
 }
 
+
 var verifyToken = function (req, res, next) {
-    console.log("yes it is coming to verifytoken");
+    // console.log("yes it is coming to verifytoken");
     var headerValue = req.header("Authorization");
+    console.log("in verify token "+headerValue)
     if (!headerValue) {
         closeConnection();
         return res.status(400).json({ "error": "Authorization header needs to be provided for using API" });
@@ -75,7 +78,13 @@ var verifyToken = function (req, res, next) {
 const route = express.Router();
 route.use(connectToDb);
 route.use("/putBudget", verifyToken);
+route.use("/deleteBudget", verifyToken);
+route.use("/deleteBudgetByMonth",verifyToken);
+route.use("/getBudget", verifyToken);
 route.use("/putBudgetByMonth", verifyToken);
+route.use("/getBudgetByMonth", verifyToken);
+route.use("/editBudget", verifyToken);
+route.use("/editBudgetByMonth", verifyToken);
 
 route.post("/signup", [
     body("firstName", "firstName cannot be empty").notEmpty().trim().escape(),
@@ -318,22 +327,26 @@ route.put("/users", [
 });
 
 route.get('/getBudget', (request, response) => {
-    mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true })
-        .then(() => {
-            console.log("Connected to the Database");
-            nameModel.find({})
-                .then((data) => {
-                    mongoose.connection.close();
-                    console.log("Disconnected from Database");
-                    return res.status(200).send(data);
-                })
-                .catch((connectionError) => {
-                    console.log(connectionError);
-                });
-        })
-        .catch((connectionError) => {
-            console.log(connectionError);
-        });
+    var query = { "userId": decoded._id };
+    console.log(query);
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            closeConnection();
+            if (result.length <= 0) {
+                console.log("Budget Details Found");
+                var userBudget = [];
+                return response.status(200).json({"user_budget": userBudget});
+            } else {
+                console.log("alloted Budget");
+                var userBudget = result[0];
+                return response.status(200).json( {"user_budget": userBudget});
+            }
+        }
+});
 });
 
 route.put('/putBudget', (request, response) => {
@@ -393,11 +406,19 @@ route.put('/putBudget', (request, response) => {
                 var userBudget = result[0];
                 var length = userBudget.allotedBudget.length;
 
-                console.log(length);
                 var text = {};
                 text.title = request.body.title;
                 text.budget = request.body.budget;
                 text.color = request.body.color;
+
+                for(let i=0; i<length; i++){
+                    if(text.title == userBudget.allotedBudget[i].title){
+                        return response.status(400).json({"error":"Budget with same name already present. Please edit that"});
+                    }
+                }
+
+                console.log(length);
+                
                 userBudget.allotedBudget[length] = text;
 
                 console.log("after modification "+userBudget.allotedBudget);
@@ -502,6 +523,228 @@ route.put('/putBudgetByMonth', (request, response) => {
     });
 });
 
+route.put('/deleteBudget', (request, response) => {
 
+    var query = { "userId": decoded._id };
+    console.log(query);
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            // closeConnection();
+            if (result.length <= 0) {
+                console.log("no data found");
+            } else {
+                console.log("already present");
+                //delete the Budget as per the name
+                var budget_name = request.body.title;
+                var userBudget = result[0];
+                var length = userBudget.allotedBudget.length;
+                let i=0;
+                for(i=0; i<length; i++){
+                    if(budget_name == userBudget.allotedBudget[i].title){
+                        break;
+                    }
+                }
+                userBudget.allotedBudget.splice(i, 1);
+
+                console.log("after modification "+userBudget.allotedBudget);
+
+                var newQuery={$set:{"allotedBudget":userBudget.allotedBudget}};
+
+                pb_collection.updateOne(query,newQuery,(e,reslt)=>{
+                    if(e){
+                        closeConnection();
+                        return response.status(400).json({"error":err});
+                    }
+                    else{
+                        closeConnection();
+                        return response.status(200).json({"result":"Budget Deleted"});
+                    }
+                });
+            }
+        }
+    });
+});
+
+route.put('/editBudget', (request, response) => {
+
+    var query = { "userId": decoded._id };
+    console.log(query);
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            // closeConnection();
+            if (result.length <= 0) {
+                console.log("no data found");
+            } else {
+                console.log("already present");
+                //delete the Budget as per the name
+                var budget_name = request.body.title;
+                var userBudget = result[0];
+                var length = userBudget.allotedBudget.length;
+                let i=0;
+                for(i=0; i<length; i++){
+                    if(budget_name == userBudget.allotedBudget[i].title){
+                        break;
+                    }
+                }
+                userBudget.allotedBudget[i].color = request.body.color;
+                userBudget.allotedBudget[i].budget = request.body.budget;
+
+                console.log("after modification "+userBudget.allotedBudget);
+
+                var newQuery={$set:{"allotedBudget":userBudget.allotedBudget}};
+
+                pb_collection.updateOne(query,newQuery,(e,reslt)=>{
+                    if(e){
+                        closeConnection();
+                        return response.status(400).json({"error":err});
+                    }
+                    else{
+                        closeConnection();
+                        return response.status(200).json({"result":"Budget Updated"});
+                    }
+                });
+            }
+        }
+    });
+});
+
+route.put('/deleteBudgetByMonth', (request, response) => {
+
+    var query = { "userId": decoded._id };
+    console.log(query);
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            // closeConnection();
+            if (result.length <= 0) {
+                console.log("no data found");
+            } else {
+                console.log("already present");
+                //delete the Budget as per the name
+                var budget_name = request.body.title;
+                var userBudget = result[0];
+                var month = request.body.month;
+                var length = userBudget.monthlyBudget[month].length;
+                var monthlyBudget = userBudget.monthlyBudget;
+                var user_month_budget = userBudget.monthlyBudget[month];
+                let i=0;
+                for(i=0; i<length; i++){
+                    if(budget_name ==  user_month_budget[i].title){
+                        break;
+                    }
+                }
+                user_month_budget.splice(i, 1);
+
+                monthlyBudget[month] = user_month_budget;
+
+                console.log("after modification "+monthlyBudget);
+
+                var newQuery={$set:{"monthlyBudget":monthlyBudget}};
+
+                pb_collection.updateOne(query,newQuery,(e,reslt)=>{
+                    if(e){
+                        closeConnection();
+                        return response.status(400).json({"error":err});
+                    }
+                    else{
+                        closeConnection();
+                        return response.status(200).json({"result":"Budget Deleted"});
+                    }
+                });
+            }
+        }
+    });
+});
+
+route.put('/editBudgetByMonth', (request, response) => {
+
+    var query = { "userId": decoded._id };
+    console.log(query);
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            // closeConnection();
+            if (result.length <= 0) {
+                console.log("no data found");
+            } else {
+                console.log("already present");
+                //delete the Budget as per the name
+                var budget_name = request.body.title;
+                var userBudget = result[0];
+                var month = request.body.month;
+                var length = userBudget.monthlyBudget[month].length;
+                var monthlyBudget = userBudget.monthlyBudget;
+                var user_month_budget = userBudget.monthlyBudget[month];
+                let i=0;
+                for(i=0; i<length; i++){
+                    if(budget_name ==  user_month_budget[i].title){
+                        break;
+                    }
+                }
+                user_month_budget[i].color = request.body.color;
+                user_month_budget[i].budget = request.body.budget;
+
+                monthlyBudget[month] = user_month_budget;
+
+                console.log("after modification "+monthlyBudget);
+
+                var newQuery={$set:{"monthlyBudget":monthlyBudget}};
+
+                pb_collection.updateOne(query,newQuery,(e,reslt)=>{
+                    if(e){
+                        closeConnection();
+                        return response.status(400).json({"error":err});
+                    }
+                    else{
+                        closeConnection();
+                        return response.status(200).json({"result":"Budget Updated"});
+                    }
+                });
+            }
+        }
+    });
+});
+
+route.get('/getBudgetByMonth/:month', (request, response) => {
+    var query = { "userId": decoded._id };
+    console.log(query);
+    const month = request.params.month;
+    console.log(month)
+    pb_collection.find(query).toArray((err, result) => {
+        if (err) {
+            closeConnection();
+            return response.status(400).json({ "error": err });
+        } else {
+            console.log(result);
+            closeConnection();
+            if (result.length <= 0) {
+                console.log("Budget Details Not Found");
+                var userBudget = [];
+                return response.status(200).json({"user_budget": userBudget});
+            } else {
+                console.log("Budget Details Found");
+                var userBudget = result[0];
+                if(userBudget.monthlyBudget == undefined || userBudget.monthlyBudget[month] == undefined){
+                    return response.status(200).json( {"user_budget": []});
+                }
+                return response.status(200).json( {"user_budget": userBudget.monthlyBudget[month]});
+            }
+        }
+});
+});
 
 module.exports = route; 

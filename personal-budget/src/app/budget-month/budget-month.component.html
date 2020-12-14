@@ -1,0 +1,50 @@
+<pb-menu></pb-menu>
+<div class="budget-month-option">
+  <h3>Select a month to retrieve your budget details</h3>
+  <div class="retrieve-div">
+    <input type="month" id="start" name="start" min="2020-01" value="2020-12">
+    <button (click)="getBudgetData()">Retrieve</button>
+  </div>
+  <div class="chart-div">
+    <h3>Select below to different display options</h3>
+    <select name="display" id="display">
+      <option value="piechart">Pie-Chart</option>
+      <option value="doughnut">Doughnut</option>
+      <option value="barchart">Bar-Chart</option>
+      <option value="linechart">LineChart</option>
+      <option value="table">Table</option>
+    </select>
+    <button (click)="chart_display()">Change</button>
+  </div>
+</div>
+<div id="pie-chart-container" style="position: relative; width:700px; margin:auto">
+  <canvas id="pie-chart"></canvas>
+</div>
+<div id="doughnut-chart-container" style="position: relative; width:700px; margin:auto">
+  <canvas id="doughnut-chart"></canvas>
+</div>
+<div id="bar-chart-container" style="position: relative; width:700px; margin:auto">
+  <canvas id="bar-chart"></canvas>
+</div>
+<div id="line-chart-container" style="position: relative; width:700px; margin:auto">
+  <canvas id="line-chart"></canvas>
+</div>
+<div class="table-container" id="table-id-area" style="position: relative; width:700px; margin:auto">
+  <div class="table_area">
+    <table id="table" datatable [dtOptions]="dtOptions" class="table table-striped table-bordered" cellspacing="0"
+      width="100%">
+      <thead>
+        <th>Budget Title</th>
+        <th>Budget Amount</th>
+        <th>Budget Color</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let post of posts">
+          <td>{{ post.title }}</td>
+          <td>{{ post.budget }}</td>
+          <td>{{ post.color }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

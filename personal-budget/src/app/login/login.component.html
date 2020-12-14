@@ -1,0 +1,11 @@
+<!-- <pb-hero></pb-hero> -->
+<div class="login">
+  <!-- <h1>Login</h1> -->
+  <form action="javascript:void(0);" (submit)="checkCredentials()">
+    <input type="text" id="username" name="u" class="form-control" placeholder="Username" required="required" />
+    <input type="password" id="password" name="p" class="form-control" placeholder="Password" required="required" />
+    <button type="submit" class="btn btn-primary btn-block btn-large">Login</button>
+  </form>
+  <button type="button" class="btn btn-success btn-block btn-large registerButton"
+    (click)="register()">Register</button>
+</div>
