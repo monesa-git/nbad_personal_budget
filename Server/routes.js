@@ -65,7 +65,7 @@ var verifyToken = function (req, res, next) {
             next();
         } catch (err) {
             closeConnection();
-            return res.status(400).json({ "error": err });
+            return res.status(400).json({ "error": "Token Expired. Please login again" });
         }
     }
     else {
@@ -85,6 +85,7 @@ route.use("/putBudgetByMonth", verifyToken);
 route.use("/getBudgetByMonth", verifyToken);
 route.use("/editBudget", verifyToken);
 route.use("/editBudgetByMonth", verifyToken);
+route.use("/refreshToken",verifyToken);
 
 route.post("/signup", [
     body("firstName", "firstName cannot be empty").notEmpty().trim().escape(),
@@ -121,12 +122,11 @@ route.post("/signup", [
             else {
                 if (res.ops.length > 0) {
                     var usr = res.ops[0].getUser();
-                    usr.exp = Math.floor(Date.now() / 1000) + (60 * 60);
+                    usr.exp = Math.floor(Date.now() / 1000) + (1 * 60);
                     var token = jwt.sign(usr, tokenSecret);
                     result = res.ops[0].getUser();
                     result.token = token;
                 }
-
             }
             closeConnection();
             return response.status(responseCode).json(result);
@@ -138,6 +138,8 @@ route.post("/signup", [
         return response.status(400).json({ "error": error });
     }
 });
+
+
 
 route.get("/login", [
     header("Authorization", "Authorization header required to login").notEmpty().trim()
@@ -174,7 +176,7 @@ route.get("/login", [
                         if (bcrypt.compareSync(loginInfo[1], user.password)) {
                             result = user.getUser();
                             user = user.getUser();
-                            user.exp = Math.floor(Date.now() / 1000) + (60 * 60);
+                            user.exp = Math.floor(Date.now() / 1000) + (1 * 60);
                             var token = jwt.sign(user, tokenSecret);
                             result.token = token;
                             responseCode = 200;
@@ -203,6 +205,24 @@ route.get("/login", [
         return response.status(400).json({ "error": error.toString() });
     }
 
+});
+
+route.get("/refreshToken", (request, response) => {
+    console.log(decoded);
+    
+    if(decoded._id == undefined){
+        return response.status(400).send({"error":"token not generated"});
+    }
+    // user._id = decoded._id;
+    // user.age = decoded.age;
+    // user.firstName = decoded.firstName;
+    // user.lastName = decoded.lastName;
+    // user.gender = decoded.gender;
+    // user.email = decoded.email;
+
+    decoded.exp = Math.floor(Date.now() / 1000) + (1 * 60);
+    var token = jwt.sign(decoded, tokenSecret);
+    return response.status(200).send({"token":token});
 });
 
 route.get("/users/logout", (request, response) => {
@@ -616,6 +636,8 @@ route.put('/editBudget', (request, response) => {
     });
 });
 
+
+
 route.put('/deleteBudgetByMonth', (request, response) => {
 
     var query = { "userId": decoded._id };
@@ -741,7 +763,26 @@ route.get('/getBudgetByMonth/:month', (request, response) => {
                 if(userBudget.monthlyBudget == undefined || userBudget.monthlyBudget[month] == undefined){
                     return response.status(200).json( {"user_budget": []});
                 }
-                return response.status(200).json( {"user_budget": userBudget.monthlyBudget[month]});
+
+                var monthBudgetTemp = userBudget.monthlyBudget[month];
+                // console.log(userBudget.allotedBudget);
+                for(var i=0; i<monthBudgetTemp.length; i++){
+                    for(var j=0; j<userBudget.allotedBudget.length; j++){
+                        if(monthBudgetTemp[i].title == userBudget.allotedBudget[j].title){
+                            //budget has been found so have to add the amount value
+                            monthBudgetTemp[i].actual = userBudget.allotedBudget[j].budget;
+                            monthBudgetTemp[i].difference = userBudget.allotedBudget[j].budget - monthBudgetTemp[i].budget;
+                            break;
+                        }
+                        if(monthBudgetTemp[i].actual == undefined){
+                            monthBudgetTemp[i].actual = "Not assigned";
+                            monthBudgetTemp[i].difference = "Cant calculate"
+                        }
+                    }
+                }
+                console.log("modified month budget temp : "+monthBudgetTemp[0].actual);
+
+                return response.status(200).json( {"user_budget": monthBudgetTemp});
             }
         }
 });
