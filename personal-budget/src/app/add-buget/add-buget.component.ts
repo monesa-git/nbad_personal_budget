@@ -18,8 +18,6 @@ export class AddBugetComponent implements OnInit {
   constructor(public dataService: DataService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    var edit_form = document.getElementById("edit-form") as HTMLElement;
-    edit_form.style.display = "none";
     this.getBudgetData();
   }
 
@@ -38,11 +36,11 @@ export class AddBugetComponent implements OnInit {
     var start = (document.getElementById('start') as HTMLInputElement).value;
     //fetching only month in it.
     var month = start.split("-");
-    var month_value = month[1] - 1;
+    var month_value = parseInt(month[1]) - 1;
 
-    this.http.get('http://localhost:3000/api/v1/getBudgetByMonth/' + month_value, { headers })
+    this.http.get('http://104.131.167.38:3000/api/v1/getBudgetByMonth/' + month_value, { headers })
       .subscribe(posts => {
-        this.posts = posts.user_budget;
+        this.posts = posts["user_budget"];
 
         var dt = this.dtOptions = {
           pagingType: 'full_numbers',
@@ -52,8 +50,8 @@ export class AddBugetComponent implements OnInit {
           scrollCollapse: true
         };
       }, error => {
-        alert("Token has expired. Please login again");
-        window.location = '/'
+        alert(error.error.error);
+        window.location.href = '/'
       });
   }
 
@@ -67,13 +65,13 @@ export class AddBugetComponent implements OnInit {
     var start = (document.getElementById('start') as HTMLInputElement).value;
     //fetching only month in it.
     var month = start.split("-");
-    var month_value = month[1] - 1;
+    var month_value = parseInt(month[1]) - 1;
 
     console.log(color);
 
     this.dataService.putBudgetByMonth(title, budget, color, month_value).then(function (res) {
       alert("Budget has been added successfully");
-      window.location = '/add-budget';
+      window.location.href = '/add-budget';
     }).catch(function (err) {
       alert(err.response.data.error);
     });
@@ -81,8 +79,7 @@ export class AddBugetComponent implements OnInit {
 
   editBudget(editBudgetTitle, editBudgetAmount, editBudgetColor) {
     // alert("hello it is editBudget : " + editBudgetTitle);
-    var edit_form = document.getElementById("edit-form") as HTMLElement;
-    edit_form.style.display = "";
+    (document.getElementById('id02') as HTMLElement).style.display = 'block';
     (document.getElementById('edit-title') as HTMLInputElement).value = editBudgetTitle;
     (document.getElementById('edit-amount') as HTMLInputElement).value = editBudgetAmount;
     (document.getElementById('edit-color') as HTMLInputElement).value = editBudgetColor;
@@ -94,14 +91,14 @@ export class AddBugetComponent implements OnInit {
     var start = (document.getElementById('start') as HTMLInputElement).value;
     //fetching only month in it.
     var month = start.split("-");
-    var month_value = month[1] - 1;
+    var month_value = parseInt(month[1]) - 1;
     const editBudgetTitle = (document.getElementById('edit-title') as HTMLInputElement).value;
     const editBudgetAmount = (document.getElementById('edit-amount') as HTMLInputElement).value;
     const editBudgetColor = (document.getElementById('edit-color') as HTMLInputElement).value;
     var confirm_status = confirm("Are you sure you want to edit " + editBudgetTitle);
     if (confirm_status == true) {
       this.dataService.edit_budget_by_month(editBudgetTitle, editBudgetAmount, editBudgetColor, month_value).then(function (res) {
-        window.location = '/add-budget';
+        window.location.href = '/add-budget';
       }).catch(function (err) {
         alert(err.response.data.error);
       });
@@ -115,12 +112,12 @@ export class AddBugetComponent implements OnInit {
     var start = (document.getElementById('start') as HTMLInputElement).value;
     //fetching only month in it.
     var month = start.split("-");
-    var month_value = month[1] - 1;
+    var month_value = parseInt(month[1]) - 1;
 
     var confirm_status = confirm("Are you sure you want to delete " + deleteBudgetTitle);
     if (confirm_status == true) {
       this.dataService.delete_budget_by_month(deleteBudgetTitle, month_value).then(function (res) {
-        window.location = '/add-budget';
+        window.location.href = '/add-budget';
       }).catch(function (err) {
         alert(err.response.data.error);
       });

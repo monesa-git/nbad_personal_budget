@@ -20,8 +20,6 @@ export class BudgetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    var edit_form = document.getElementById("edit-form") as HTMLElement;
-    edit_form.style.display = "none";
     this.getBudgetData();
 
   }
@@ -37,9 +35,9 @@ export class BudgetComponent implements OnInit {
       'Authorization': `Bearer ${cookieValue}`
     })
 
-    this.http.get('http://localhost:3000/api/v1/getBudget', { headers })
+    this.http.get('http://104.131.167.38:3000/api/v1/getBudget', { headers })
       .subscribe(posts => {
-        this.posts = posts.user_budget.allotedBudget;
+        this.posts = posts["user_budget"].allotedBudget;
 
         var dt = this.dtOptions = {
           pagingType: 'full_numbers',
@@ -49,8 +47,8 @@ export class BudgetComponent implements OnInit {
           scrollCollapse: true
         };
       }, error => {
-        alert("Token has expired. Please login again");
-        window.location = '/'
+        alert(error.error.error);
+        window.location.href = '/'
       });
   }
 
@@ -64,7 +62,7 @@ export class BudgetComponent implements OnInit {
 
     this.dataService.add_budget(title, budget, color).then(function (res) {
       alert("Budget has been added successfully");
-      window.location = '/budget';
+      window.location.href = '/budget';
     }).catch(function (err) {
       alert(err.response.data.error);
     });
@@ -72,8 +70,7 @@ export class BudgetComponent implements OnInit {
 
   editBudget(editBudgetTitle, editBudgetAmount, editBudgetColor) {
     // alert("hello it is editBudget : " + editBudgetTitle);
-    var edit_form = document.getElementById("edit-form") as HTMLElement;
-    edit_form.style.display = "";
+    (document.getElementById('id02') as HTMLElement).style.display = 'block';
     (document.getElementById('edit-title') as HTMLInputElement).value = editBudgetTitle;
     (document.getElementById('edit-amount') as HTMLInputElement).value = editBudgetAmount;
     (document.getElementById('edit-color') as HTMLInputElement).value = editBudgetColor;
@@ -87,7 +84,7 @@ export class BudgetComponent implements OnInit {
     var confirm_status = confirm("Are you sure you want to edit " + editBudgetTitle);
     if (confirm_status == true) {
       this.dataService.edit_budget(editBudgetTitle, editBudgetAmount, editBudgetColor).then(function (res) {
-        window.location = '/budget';
+        window.location.href = '/budget';
       }).catch(function (err) {
         alert(err.response.data.error);
       });
@@ -100,7 +97,7 @@ export class BudgetComponent implements OnInit {
     var confirm_status = confirm("Are you sure you want to delete " + deleteBudgetTitle);
     if (confirm_status == true) {
       this.dataService.delete_budget(deleteBudgetTitle).then(function (res) {
-        window.location = '/budget';
+        window.location.href = '/budget';
       }).catch(function (err) {
         alert(err.response.data.error);
       });

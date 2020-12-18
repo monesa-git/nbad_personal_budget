@@ -12,4 +12,9 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  logout() {
+    document.cookie = "token = ";
+    window.location.href = "/";
+  }
+
 }

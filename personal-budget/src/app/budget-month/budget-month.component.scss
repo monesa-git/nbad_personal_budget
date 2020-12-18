@@ -4,3 +4,25 @@
 .retrieve-div {
   text-align: center;
 }
+
+body {
+  background: white;
+}
+
+#mySidebar {
+  background: #2980b9 !important;
+  color: white !important;
+}
+
+.card-container {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  padding: 12p;
+  background-color: whitesmoke;
+}
+
+.sidebar-details {
+  background: whitesmoke;
+  width: 100%;
+  padding: 12px;
+}

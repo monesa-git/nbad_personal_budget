@@ -29,6 +29,7 @@ input {
   -o-transition: box-shadow 0.5s ease;
   -ms-transition: box-shadow 0.5s ease;
   transition: box-shadow 0.5s ease;
+  margin: 10px;
 }
 input:focus {
   box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4),
@@ -91,4 +92,32 @@ input:focus {
 .createBudgetDiv {
   width: 70%;
   margin: auto;
+}
+
+.modal-button {
+  font-size: 15px !important;
+  background: linear-gradient(90deg, #727a7a 0%, #80b57c 50%, #1c1f1c 100%);
+}
+
+.modal-button-div {
+  text-align: center;
+}
+
+.modal-submit-button {
+  background: linear-gradient(90deg, #727a7a 0%, #80b57c 50%, #1c1f1c 100%);
+  width: 50%;
+  height: 33px;
+  margin: 10px;
+}
+
+.modal-header {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 15px;
+}
+
+.modal-footer {
+  background-color: #007bff;
+  color: #fff;
+  font-size: 15px;
 }

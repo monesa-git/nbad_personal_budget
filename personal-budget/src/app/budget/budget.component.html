@@ -1,4 +1,5 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <pb-menu></pb-menu>
 <div class="createBudgetDiv">
   <div class="table_area">
@@ -30,27 +31,73 @@
       </tbody>
     </table>
   </div>
-  <div class="form-area">
-    <form action="javascript:void(0);" style="display: flex;" (submit)="addBudget()">
-      <input type="text" id="title" name="title" class="form-control" placeholder="Enter Title" required="required" />
-      <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter Amount"
-        required="required" />
-      <input type="color" id="color" name="color" value="#ff0000" style="height: 35px;
-      width: 20%;"><br>
-      <button type="submit" class="btn btn-primary btn-block btn-large">Add</button>
-    </form>
-  </div>
 
-  <div class="form-area" id="edit-form">
-    <form action="javascript:void(0);" style="display: flex;" (submit)="editButtonSubmit()">
-      <input type="text" id="edit-title" name="title" class="form-control" placeholder="Enter Title" required="required"
-        readonly />
-      <input type="number" id="edit-amount" name="amount" class="form-control" placeholder="Enter Amount"
-        required="required" />
-      <input type="color" id="edit-color" name="color" value="#ff0000" style="height: 35px;
-      width: 20%;"><br>
-      <button type="submit" class="btn btn-primary btn-block btn-large">Edit</button>
-    </form>
-  </div>
 
+</div>
+
+<!-- Add Budget Modal -->
+<div class="w3-container modal-button-div">
+  <button onclick="document.getElementById('id01').style.display='block'"
+    class="w3-button w3-green w3-large modal-button">Add
+    Budget</button>
+
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <header class="w3-container modal-header">
+        <span onclick="document.getElementById('id01').style.display='none'"
+          class="w3-button w3-display-topright">&times;</span>
+        <h4>Add Budget</h4>
+      </header>
+      <div class="w3-container" style="padding:25px;">
+        <form action="javascript:void(0);" style="display: flex;" (submit)="addBudget()">
+          <input type="text" id="title" name="title" class="form-control" placeholder="Enter Title"
+            required="required" />
+          <input type="number" id="amount" name="amount" class="form-control" placeholder="Enter Amount"
+            required="required" />
+          <input type="color" id="color" name="color" value="#ff0000" style="height: 35px;
+        width: 20%;"><br>
+          <button type="submit" class="btn btn-primary btn-block btn-large modal-submit-button">Add</button>
+        </form>
+      </div>
+
+      <footer class="w3-container modal-footer" style="text-align: center;">
+        <button onclick="document.getElementById('id01').style.display='none'" type="button" style="width:100%;"
+          class="w3-button">Cancel</button>
+      </footer>
+
+    </div>
+  </div>
+</div>
+
+<!-- Edit Budget Modal -->
+<div class="w3-container">
+
+  <div id="id02" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <header class="w3-container modal-header">
+        <span onclick=" document.getElementById('id02').style.display='none'"
+          class=" w3-button w3-display-topright">&times;</span>
+        <h4>Edit Budget</h4>
+      </header>
+      <div class="w3-container" style="padding:25px;">
+        <form action="javascript:void(0);" style="display: flex;" (submit)="editButtonSubmit()">
+          <input type="text" id="edit-title" name="title" class="form-control" placeholder="Enter Title"
+            required="required" readonly />
+          <input type="number" id="edit-amount" name="amount" class="form-control" placeholder="Enter Amount"
+            required="required" />
+          <input type="color" id="edit-color" name="color" value="#ff0000" style="height: 35px;
+          width: 20%;"><br>
+          <button type="submit" class="btn btn-primary btn-block btn-large  modal-submit-button">Edit</button>
+        </form>
+      </div>
+
+      <footer class="w3-container modal-footer" style="text-align: center;">
+        <button onclick="document.getElementById('id02').style.display='none'" type="button" style="width:100%;"
+          class="w3-button">Cancel</button>
+      </footer>
+
+    </div>
+  </div>
 </div>

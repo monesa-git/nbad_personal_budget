@@ -51,52 +51,7 @@ export class HomepageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(this.dataService.budgetData);
-    // if (this.dataService.budgetData == undefined || this.dataService.budgetData.length == 0){
-    //   console.log('It is coming to the if part as there is no data and the page has been reloaded');
-    //   this.dataService.getData().subscribe((res: any) => {
-    //     console.log(res);
-    //     this.dataService.budgetData = res.MyBudget;
-    //     for (let i = 0; i < res.myBudget.length; i++){
-    //       this.dataChart.datasets[0].data[i] = res.myBudget[i].budget;
-    //       this.dataChart.labels[i] = res.myBudget[i].title;
-    //       this.dataChart.datasets[0].backgroundColor[i] = res.myBudget[i].color;
-    //     }
-    //     // rendering the chart js chart
-    //     this.createChart();
-    //     this.data = res.myBudget;
-
-    //     // rendering the D3js chart
-    //     this.createSvg();
-    //     this.createColors();
-    //     this.drawChart();
-    //   });
-    // }else{
-    //   // dataservice is already there.. so
-    //   console.log('It is coming to else part where the dataservice is already there');
-    //   for (let i = 0; i < this.dataService.budgetData.length; i++){
-    //     this.dataChart.datasets[0].data[i] = this.dataService.budgetData[i].budget;
-    //     this.dataChart.labels[i] = this.dataService.budgetData[i].title;
-    //     this.dataChart.datasets[0].backgroundColor[i] = this.dataService.budgetData[i].color;
-    //   }
-
-    //   // rendering the chart js chart
-    //   this.createChart();
-
-    //   this.data = this.dataService.budgetData;
-
-    //   // rendering the D3js chart
-    //   this.createSvg();
-    //   this.createColors();
-    //   this.drawChart();
-    // }
-
-    // tslint:disable-next-line: only-arrow-functions
-    // tslint:disable-next-line: typedef
-
     this.getData();
-    // console.log("inside value : ", value);
-
   }
 
   getData() {
@@ -104,11 +59,11 @@ export class HomepageComponent implements OnInit {
       console.log(res.data)
       if (res.data.user_budget.length == 0) {
         alert('Welcome to the Personal Budget app. As a first step please add your budgets in the page opened');
-        window.location = '/budget';
+        window.location.href = '/budget';
       } else {
         //Still have to try this one out
         //Load the chart thingy here
-        window.location = '/budget-detail'
+        window.location.href = '/budget-detail'
       }
     }).catch(function (err) {
       alert(err.response.data.error);

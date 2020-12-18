@@ -1,7 +1,8 @@
 import { registerLocaleData } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ROUTER_INITIALIZER } from '@angular/router';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'pb-login',
@@ -11,10 +12,12 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   router = Router;
+  faEnvelope = faEnvelope;
+  faLock = faLock;
   constructor(public dataService: DataService, router: Router) { }
 
   ngOnInit(): void {
-
+    console.log("yes it is coming here");
   }
 
   checkCredentials() {
@@ -26,15 +29,14 @@ export class LoginComponent implements OnInit {
       .then(function (res) {
         console.log(res.data);
         document.cookie = 'token = ' + res.data.token;
-        window.location = '/home';
-        // this.router.navigate(['/home']);
+        window.location.href = '/home';
       }).catch(function (err) {
         alert(err.response.data.error);
       });
 
+
+
   }
-  register() {
-    window.location = '/register';
-  }
+
 
 }

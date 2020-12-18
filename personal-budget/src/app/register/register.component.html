@@ -1,5 +1,5 @@
-<div class="login">
-  <!-- <h1>Register</h1> -->
+<!-- <div class="login">
+  <h1>Register</h1>
   <form action="javascript:void(0);" (submit)="register_user()">
     <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Enter FirstName"
       required="required" />
@@ -12,7 +12,7 @@
       required="required" />
     <button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
   </form>
-</div>
+</div> -->
 
 <!-- "firstName":"Monesa",
     "lastName":"Thoguluva",
@@ -20,3 +20,74 @@
     "gender":"Female",
     "email":"monesatjzen@gmail.com",
     "password":"password" -->
+
+<div class="login-component-full-class">
+  <div class="limiter">
+    <div class="container-login100">
+      <div class="wrap-login100">
+
+        <form class="login100-form validate-form" action="javascript:void(0);" (submit)="register_user()">
+          <span class="login100-form-title">
+            Member Register
+          </span>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="firstname" name="firstname" placeholder="Enter FirstName" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="lastname" name="lastname" placeholder="Enter LastName" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input type="number" class="input100" id="age" name="age" placeholder="Enter Age" required="required"
+              required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="gender" name="gender" placeholder="Enter Gender" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faUser"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="username" type="text" name="email" placeholder="Email" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faEnvelope"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="password" type="password" name="pass" placeholder="Password" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faLock"></fa-icon>
+            </span>
+          </div>
+
+          <div class="container-login100-form-btn">
+            <button type="submit" class="login100-form-btn">
+              Register Member
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,5 @@
 <!-- <pb-hero></pb-hero> -->
-<div class="login">
-  <!-- <h1>Login</h1> -->
+<!-- <div class="login">
   <form action="javascript:void(0);" (submit)="checkCredentials()">
     <input type="text" id="username" name="u" class="form-control" placeholder="Username" required="required" />
     <input type="password" id="password" name="p" class="form-control" placeholder="Password" required="required" />
@@ -8,4 +7,47 @@
   </form>
   <button type="button" class="btn btn-success btn-block btn-large registerButton"
     (click)="register()">Register</button>
+</div> -->
+<div class="login-component-full-class">
+  <div class="limiter">
+    <div class="container-login100">
+      <div class="wrap-login100">
+
+        <form class="login100-form validate-form" action="javascript:void(0);" (submit)="checkCredentials()">
+          <span class="login100-form-title">
+            Member Login
+          </span>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="username" type="text" name="email" placeholder="Email" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faEnvelope"></fa-icon>
+            </span>
+          </div>
+
+          <div class="wrap-input100 validate-input">
+            <input class="input100" id="password" type="password" name="pass" placeholder="Password" required>
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+              <fa-icon [icon]="faLock"></fa-icon>
+            </span>
+          </div>
+
+          <div class="container-login100-form-btn">
+            <button type="submit" class="login100-form-btn">
+              Login
+            </button>
+          </div>
+
+          <div class="text-center p-t-136 create-account">
+            <a class="txt2" href="/register">
+              Create your Account
+              <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

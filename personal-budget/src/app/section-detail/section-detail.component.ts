@@ -10,6 +10,7 @@ export class SectionDetailComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log("in section details")
   }
 
 }

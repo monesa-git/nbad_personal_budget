@@ -38,7 +38,7 @@ div.menu ul li a:hover {
 
 .navbar {
   width: 100%;
-  background-color: #555;
+  background-color: #2980b9;
   overflow: auto;
   height: 47px;
   justify-content: space-evenly;
@@ -48,15 +48,6 @@ div.menu ul li a:hover {
   float: left;
   color: white;
   text-decoration: none;
-}
-
-.navbar a:hover {
-  // padding: 12px;
-  background-color: #000;
-}
-
-.active {
-  background-color: #4caf50;
 }
 
 @media screen and (max-width: 500px) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'pb-register',
@@ -9,7 +10,9 @@ import { DataService } from '../data.service';
 export class RegisterComponent implements OnInit {
 
   constructor(public dataService: DataService) { }
-
+  faEnvelope = faEnvelope;
+  faLock = faLock;
+  faUser = faUser;
   ngOnInit(): void {
   }
 
@@ -26,7 +29,7 @@ export class RegisterComponent implements OnInit {
       .then(function (res) {
         console.log(res.data);
         document.cookie = 'token = ' + res.data.token;
-        window.location = '/home';
+        window.location.href = '/home';
       }).catch(function (err) {
         console.log(err);
       });
