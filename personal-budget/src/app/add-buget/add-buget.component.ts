@@ -51,6 +51,7 @@ export class AddBugetComponent implements OnInit {
         };
       }, error => {
         alert(error.error.error);
+        document.cookie = "token = ";
         window.location.href = '/'
       });
   }

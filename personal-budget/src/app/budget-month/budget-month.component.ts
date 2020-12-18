@@ -75,7 +75,7 @@ export class BudgetMonthComponent implements OnInit {
           scrollCollapse: true
         };
 
-
+        this.total_amount = 0;
         for (var i = 0; i < result_budget.length; i++) {
           this.dataChart.datasets[0].data[i] = result_budget[i].budget;
           this.total_amount += parseInt(result_budget[i].budget);
@@ -87,6 +87,7 @@ export class BudgetMonthComponent implements OnInit {
 
       }, error => {
         alert(error.error.error);
+        document.cookie = "token = ";
         window.location.href = '/'
       });
   }

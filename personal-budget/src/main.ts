@@ -14,7 +14,15 @@ var timer;
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
-start_timer();
+var cookieValue = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('token'))
+  .split('=')[1];
+
+if (cookieValue != undefined && cookieValue != "") {
+  start_timer();
+}
+
 
 function myFunction() {
   if (seconds > 15) {
